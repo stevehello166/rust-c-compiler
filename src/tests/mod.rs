@@ -1,0 +1,2 @@
+mod lexertests;
+mod generaltests;
