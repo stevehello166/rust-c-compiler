@@ -34,21 +34,35 @@ pub fn create_abstract_syntax_tree(mut tokens: Vec<Token>) -> Result<Program, ()
                 match keyword {
                     Keyword::Return => {
                         let mut to_push:Option<u64> = None;
+                        let mut unary_op:Vec<UnaryOperation> = Vec::new();
                         for next_token in &mut tokens[token_counter+1..] {
                             println!("{:?}", next_token);
                             match next_token {
                                 Token::IntegerLiteral(x) => to_push = Some(x.parse::<u64>().expect("msg")),
-                                Token::BitwiseComplement() => {},
+                                Token::UnaryOperation(x) => {
+                                    match x {
+                                        crate::UnaryOperation::Negation => unary_op.push(UnaryOperation::Negation),
+                                        crate::UnaryOperation::BitwiseComplement => todo!(),
+                                        crate::UnaryOperation::LogicalNegation => todo!(),
+                                    }
+                                },
                                 Token::Semicolon => {
                                     let to_push = match to_push {
                                         Some(int) => int,
                                         None => return Err(())
                                     };
-                                    program.0[0].body.0.push(Statement { 
-                                        statement_type: StatementType::Return(Expression::Constant(
-                                            to_push
-                                        ))
-                                    });
+                                    if unary_op.len() == 0 {
+                                        program.0[0].body.0.push(Statement { 
+                                            statement_type: StatementType::Return(Expression::Constant(
+                                                to_push
+                                            ))
+                                        });
+                                    } else {
+                                        let expression = Expression::UnaryOperation { unary_op: (), constant: () }
+
+                                    };
+
+                                    
                                     break
                                 },
                                 _=> todo!()
@@ -124,7 +138,7 @@ pub struct Variable{
 //switch to an enum
 pub enum Expression {
     Constant(u64),
-    UnaryOperation{unary_op: UnaryOperation, constant: Expression}
+    UnaryOperation{unary_op: UnaryOperation, constant: Box<Expression>}
 }
 
 #[derive(Debug)]

@@ -36,9 +36,7 @@ pub enum Token {
     IntegerLiteral(String),
     BinaryOperation(BinaryOperation),
     Semicolon,
-    Negation,
-    BitwiseComplement,
-    LogicalNegation
+    UnaryOperation(UnaryOperation)
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -56,8 +54,11 @@ pub enum Operation {
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
-// NOTE THIS IS MEANT FOR UNARY OPERATIONS
-
+pub enum UnaryOperation {
+    Negation,
+    BitwiseComplement,
+    LogicalNegation
+}
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum BinaryOperation {
     GreaterThan,

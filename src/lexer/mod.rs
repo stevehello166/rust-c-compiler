@@ -26,9 +26,9 @@ pub(crate) fn lexer(file: String) -> Vec<Token>{
             ">" => {tokens.push(Token::BinaryOperation(BinaryOperation::GreaterThan))},
             "<" => {tokens.push(Token::BinaryOperation(BinaryOperation::LessThan))},
             ";" => {tokens.push(Token::Semicolon)},
-            "-" => {tokens.push(Token::Negation)},
-            "~" => {tokens.push(Token::BitwiseComplement)},
-            "!" => {tokens.push(Token::LogicalNegation)}
+            "-" => {tokens.push(Token::UnaryOperation(UnaryOperation::Negation))},
+            "~" => {tokens.push(Token::UnaryOperation(UnaryOperation::BitwiseComplement))},
+            "!" => {tokens.push(Token::UnaryOperation(UnaryOperation::LogicalNegation))}
             _ => {
                 if token.parse::<f64>().is_ok() {
                     tokens.push(Token::IntegerLiteral(token.to_string()))
